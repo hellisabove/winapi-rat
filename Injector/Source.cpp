@@ -1,4 +1,5 @@
 #include <Windows.h>
+#include <stdio.h>
 
 DWORD AlignSectionHeader(DWORD section_size, DWORD alginment, DWORD address) {
 	if (!(section_size % alginment))
@@ -54,14 +55,25 @@ INT main(INT arg, PCHAR argv[]) {
 										}
 
 										image_optional_header->SizeOfImage = image_section_header[PESections].VirtualAddress + image_section_header[PESections].Misc.VirtualSize;
+										image_file_header->NumberOfSections += 1;
 
+										if (SetFilePointer(x_file, 0, NULL, FILE_BEGIN) != INVALID_SET_FILE_POINTER) {
+											// add section
+											WriteFile(x_file, file_buffer, file_size, &returned_bytes, NULL);
+										}
 									}
 								}
+								LocalFree(dll_buffer);
 							}
 						}
 					}
+					CloseHandle(code_file);
 				}
 			}
+			LocalFree(file_buffer);
 		}
+		CloseHandle(x_file);
 	}
+	else
+		printf("\nUSE: %s section name target dll\n",argv[0]);
 }

@@ -1,1 +1,3 @@
-﻿
+﻿  Source.cpp
+c:\users\hellisabove\source\repos\rat\injector\source.cpp(26): warning C4312: 'type cast': conversion from 'BOOL' to 'PIMAGE_DOS_HEADER' of greater size
+  Injector.vcxproj -> C:\Users\hellisabove\source\repos\RAT\x64\Debug\Injector.exe
