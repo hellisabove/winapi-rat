@@ -19,7 +19,7 @@ INT main(INT arg, PCHAR argv[]) {
 		if (x_file != INVALID_HANDLE_VALUE) {
 			DWORD file_size = GetFileSize(x_file, NULL);
 			PBYTE file_buffer = PBYTE(LocalAlloc(LPTR, file_size));
-			DWORD returned_bytes;
+			DWORD returned_bytes, unused_bytes;
 
 			BOOL file_read = ReadFile(x_file, file_buffer, file_size, &returned_bytes, NULL);
 			if (file_read == TRUE && returned_bytes == file_size) {
@@ -63,7 +63,7 @@ INT main(INT arg, PCHAR argv[]) {
 										}
 
 										// add file
-										WriteFile(x_file, file_buffer, file_size, &returned_bytes, NULL);
+										WriteFile(x_file, dll_buffer, dll_size, &unused_bytes, NULL);
 									}
 								}
 								LocalFree(dll_buffer);
