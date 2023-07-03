@@ -23,11 +23,11 @@ INT main(INT arg, PCHAR argv[]) {
 
 			BOOL file_read = ReadFile(x_file, file_buffer, file_size, &returned_bytes, NULL);
 			if (file_read == TRUE && returned_bytes == file_size) {
-				PIMAGE_DOS_HEADER image_dos_header = (PIMAGE_DOS_HEADER)file_read;
+				PIMAGE_DOS_HEADER image_dos_header = (PIMAGE_DOS_HEADER)file_buffer;
 				if (image_dos_header->e_magic == IMAGE_DOS_SIGNATURE) { // if PE valid
-					PIMAGE_FILE_HEADER image_file_header = (PIMAGE_FILE_HEADER)(file_read + image_dos_header->e_lfanew + sizeof(DWORD));
-					PIMAGE_OPTIONAL_HEADER image_optional_header = (PIMAGE_OPTIONAL_HEADER) (file_read + image_dos_header->e_lfanew + sizeof(DWORD) + sizeof(IMAGE_FILE_HEADER));
-					PIMAGE_SECTION_HEADER image_section_header = (PIMAGE_SECTION_HEADER) (file_read + image_dos_header->e_lfanew + sizeof(IMAGE_NT_HEADERS));
+					PIMAGE_FILE_HEADER image_file_header = (PIMAGE_FILE_HEADER)(file_buffer + image_dos_header->e_lfanew + sizeof(DWORD));
+					PIMAGE_OPTIONAL_HEADER image_optional_header = (PIMAGE_OPTIONAL_HEADER) (file_buffer + image_dos_header->e_lfanew + sizeof(DWORD) + sizeof(IMAGE_FILE_HEADER));
+					PIMAGE_SECTION_HEADER image_section_header = (PIMAGE_SECTION_HEADER) (file_buffer + image_dos_header->e_lfanew + sizeof(IMAGE_NT_HEADERS));
 					WORD PESections = image_file_header->NumberOfSections;
 
 					ZeroMemory(&image_section_header[PESections], sizeof(IMAGE_SECTION_HEADER));
@@ -61,6 +61,9 @@ INT main(INT arg, PCHAR argv[]) {
 											// add section
 											WriteFile(x_file, file_buffer, file_size, &returned_bytes, NULL);
 										}
+
+										// add file
+										WriteFile(x_file, file_buffer, file_size, &returned_bytes, NULL);
 									}
 								}
 								LocalFree(dll_buffer);
