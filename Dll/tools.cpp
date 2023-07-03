@@ -27,16 +27,16 @@ DWORD ConvertVirtualAddressToRawAddress(DWORD virtual_address, LPVOID file) {
 
 int Tools::AutoInject(LPSTR target, LPCSTR payload) {
 	LPSTARTUPINFOA startup_info = new STARTUPINFOA();
-	LPPROCESS_INFORMATION process_info = new PROCESS_INFORMATION();
-	PROCESS_BASIC_INFORMATION *process_basic_info = new PROCESS_BASIC_INFORMATION();
+	LPPROCESS_INFORMATION process_information = new PROCESS_INFORMATION();
+	PROCESS_BASIC_INFORMATION *process_basic_information = new PROCESS_BASIC_INFORMATION();
 
-	BOOL process_created = CreateProcessA(NULL, target, NULL, NULL, TRUE, CREATE_SUSPENDED, NULL, NULL, startup_info, process_info);
+	BOOL process_created = CreateProcessA(NULL, target, NULL, NULL, TRUE, CREATE_SUSPENDED, NULL, NULL, startup_info, process_information);
 	if (process_created == TRUE) {
-		HANDLE target_process = process_info->hProcess;
+		HANDLE target_process = process_information->hProcess;
 		if (target_process != INVALID_HANDLE_VALUE) {
 			DWORD return_lenght = 0;
-			NtQueryInformationProcess(target_process, ProcessBasicInformation, process_basic_info, sizeof(PROCESS_BASIC_INFORMATION), &return_lenght);
-			DWORD image_base_offset = (DWORD)process_basic_info->PebBaseAddress + 8;
+			NtQueryInformationProcess(target_process, ProcessBasicInformation, process_basic_information, sizeof(PROCESS_BASIC_INFORMATION), &return_lenght);
+			DWORD image_base_offset = (DWORD)process_basic_information->PebBaseAddress + 8;
 
 			LPVOID destination_image_base = 0;
 			SIZE_T bytes_read = NULL;
@@ -122,7 +122,7 @@ int Tools::AutoInject(LPSTR target, LPCSTR payload) {
 
 								LPCONTEXT context = new CONTEXT();
 								context->ContextFlags = CONTEXT_INTEGER;
-								GetThreadContext(process_info->hThread, context);
+								GetThreadContext(process_information->hThread, context);
 
 								// machine code -> opcodes
 								// code for exec DllMain when injected
@@ -146,8 +146,8 @@ int Tools::AutoInject(LPSTR target, LPCSTR payload) {
 
 								if (success == TRUE) {
 									context->Eax = (DWORD)address_buffer;
-									SetThreadContext(process_info->hThread, context);
-									ResumeThread(process_info->hThread);
+									SetThreadContext(process_information->hThread, context);
+									ResumeThread(process_information->hThread);
 								}
 								return 0;
 							}
