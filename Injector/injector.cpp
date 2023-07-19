@@ -78,5 +78,5 @@ INT main(INT arg, PCHAR argv[]) {
 		CloseHandle(x_file);
 	}
 	else
-		printf("\nUSE: %s section name target dll\n",argv[0]);
+		printf("\nUSE: %s 'section name' target dll\n",argv[0]);
 }

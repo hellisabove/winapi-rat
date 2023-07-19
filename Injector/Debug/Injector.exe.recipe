@@ -2,7 +2,7 @@
 <Project>
   <ProjectOutputs>
     <ProjectOutput>
-      <FullPath>C:\Users\hellisabove\source\repos\RAT\Debug\Injector.exe</FullPath>
+      <FullPath>C:\Users\hellisabove\source\repos\winapi-rat\Debug\Injector.exe</FullPath>
     </ProjectOutput>
   </ProjectOutputs>
   <ContentFiles />

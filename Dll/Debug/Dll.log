@@ -1,10 +1,9 @@
 ﻿C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v150\Platforms\Win32\PlatformToolsets\v141_xp\Toolset.targets(39,5): warning MSB8051: Support for targeting Windows XP is deprecated and will not be present in future releases of Visual Studio. Please see https://go.microsoft.com/fwlink/?linkid=2023588 for more information.
-C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v150\Microsoft.CppBuild.targets(391,5): warning MSB8028: The intermediate directory (Debug\) contains files shared from another project (Dll.vcxproj).  This can lead to incorrect clean and rebuild behavior.
   fundll.cpp
-  tools.cpp
-     Creating library C:\Users\hellisabove\source\repos\RAT\Debug\FunDLL.lib and object C:\Users\hellisabove\source\repos\RAT\Debug\FunDLL.exp
+     Creating library C:\Users\hellisabove\source\repos\winapi-rat\Debug\FunDLL.lib and object C:\Users\hellisabove\source\repos\winapi-rat\Debug\FunDLL.exp
   Generating code
-c:\users\hellisabove\source\repos\rat\dll\tools.cpp(162): warning C4715: 'Tools::AutoInject': not all control paths return a value
+c:\users\hellisabove\source\repos\winapi-rat\dll\tools.cpp(162): warning C4715: 'Tools::AutoInject': not all control paths return a value
+c:\users\hellisabove\source\repos\winapi-rat\dll\fundll.cpp(44): warning C4700: uninitialized local variable 'dll_param' used
   All 6 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
   Finished generating code
-  Dll.vcxproj -> C:\Users\hellisabove\source\repos\RAT\Debug\FunDLL.dll
+  Dll.vcxproj -> C:\Users\hellisabove\source\repos\winapi-rat\Debug\FunDLL.dll

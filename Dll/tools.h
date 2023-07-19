@@ -1,5 +1,4 @@
 #include <Windows.h>
-
 #pragma once
 
 namespace Tools {
