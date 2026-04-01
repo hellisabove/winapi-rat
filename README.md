@@ -1,6 +1,6 @@
-[![justforfunnoreally.dev badge](https://img.shields.io/badge/justforfunnoreally-dev-9ff)](https://justforfunnoreally.dev)
 # winapi-rat
 This is a simple remote access trojan made in c++ using the windows api.
+DISCLAIMER: This project is for educational purposes only!!!
 
 ## Dll
 This is a DLL that is used as the payload. At the moment it can start and inject itself into a process and open a reverse shell.
